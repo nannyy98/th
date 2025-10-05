@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block title %}Редактировать товар{% endblock %}
+{% block content %}
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <h1 class="h3">Редактировать товар</h1>
+  <a class="btn btn-secondary" href="{{ url_for('products') }}">← Назад к товарам</a>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <form method="post" enctype="multipart/form-data">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Название <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" name="name" value="{{ product[1] }}" required>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Категория <span class="text-danger">*</span></label>
+          <select class="form-select" name="category_id" required>
+            <option value="">Выберите категорию</option>
+            {% for cat in categories %}
+              <option value="{{ cat[0] }}" {% if cat[0] == product[5] %}selected{% endif %}>{{ cat[1] }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Описание</label>
+        <textarea class="form-control" name="description" rows="3">{{ product[2] or '' }}</textarea>
+      </div>
+
+      <div class="row">
+        <div class="col-md-3 mb-3">
+          <label class="form-label">Цена продажи ($) <span class="text-danger">*</span></label>
+          <input type="number" class="form-control" name="price" step="0.01" value="{{ product[3] }}" required>
+        </div>
+
+        <div class="col-md-3 mb-3">
+          <label class="form-label">Себестоимость ($)</label>
+          <input type="number" class="form-control" name="cost_price" step="0.01" value="{{ product[4] or 0 }}">
+        </div>
+
+        <div class="col-md-3 mb-3">
+          <label class="form-label">Остаток (шт.)</label>
+          <input type="number" class="form-control" name="stock" value="{{ product[7] or 0 }}">
+        </div>
+
+        <div class="col-md-3 mb-3">
+          <label class="form-label">Бренд</label>
+          <input type="text" class="form-control" name="brand" value="{{ product[6] or '' }}">
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Текущее изображение</label>
+        {% if product[8] %}
+          <div class="mb-2">
+            <img src="{{ product[8] }}" alt="{{ product[1] }}" style="max-width: 200px; max-height: 200px; object-fit: cover; border-radius: 8px;">
+          </div>
+          <input type="hidden" name="current_image_url" value="{{ product[8] }}">
+        {% else %}
+          <p class="text-muted">Изображение не загружено</p>
+        {% endif %}
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Загрузить новое изображение</label>
+        <input type="file" class="form-control" name="image_file" accept="image/*">
+        <small class="text-muted">Оставьте пустым, чтобы сохранить текущее изображение</small>
+      </div>
+
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-save me-1"></i> Сохранить изменения
+        </button>
+        <a href="{{ url_for('products') }}" class="btn btn-secondary">
+          <i class="fas fa-times me-1"></i> Отмена
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
