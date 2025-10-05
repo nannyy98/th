@@ -1,0 +1,8 @@
+--- a/app.py
++++ b/app.py
+@@
+ from flask import Flask
++from telegram_webhook import tg_webhook_bp
+
+ app = Flask(__name__)
++app.register_blueprint(tg_webhook_bp)
